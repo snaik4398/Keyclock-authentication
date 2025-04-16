@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  keycloak:
+    image: jboss/keycloak:19.0.1
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - DB_VENDOR=h2
+    ports:
+      - "8080:8080"
+    networks:
+      - auth-network
+
+  auth-service:
+    build: .
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - KEYCLOAK_AUTH_SERVER_URL=http://keycloak:8080/auth
+      - KEYCLOAK_REALM=your-realm
+      - KEYCLOAK_RESOURCE=your-client
+    ports:
+      - "8081:8081"
+    depends_on:
+      - keycloak
+    networks:
+      - auth-network
+
+networks:
+  auth-network:
+    driver: bridge
