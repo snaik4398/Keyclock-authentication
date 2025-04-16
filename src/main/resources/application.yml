@@ -1,0 +1,14 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: keycloak-auth-service
+
+keycloak:
+  auth-server-url: http://localhost:8080/auth
+  realm: your-realm
+  resource: your-client
+  public-client: true
+  bearer-only: true
+  principal-attribute: preferred_username
